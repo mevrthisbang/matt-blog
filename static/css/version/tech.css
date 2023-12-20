@@ -37,7 +37,7 @@ h5 {
 .navbar-inverse .navbar-nav .nav-link,
 .navbar-nav .nav-link {
     color: #ffffff !important;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
@@ -67,18 +67,18 @@ h5 {
     padding: 0.6rem 0.6rem 0 !important;
 }
 
-.first-slot {
+.slot-1 {
     float: left;
     width: 50%;
 }
 
-.last-slot,
-.second-slot {
+.slot-3,
+.slot-2 {
     float: left;
     width: 25%;
 }
 
-.first-slot .blog-meta h4 {
+.slot-1 .blog-meta h4 {
     font-size: 31px;
     line-height: 1.4;
 }
@@ -285,7 +285,7 @@ a:focus {
 .navbar-inverse {
     color: #ffffff !important;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    background: rgba(0, 0, 0, 0) linear-gradient(to right, #A62A6C 0px, #00b7e5 100%) repeat scroll 0 0 !important
+    background: rgba(0, 0, 0, 0) linear-gradient(to right, #ffffff 0px, #000000 100%) repeat scroll 0 0 !important
 }
 
 .gp-button.btn-primary:hover,
@@ -322,9 +322,9 @@ a:focus {
     .shadow-desc {
         padding: 1rem 0.5rem;
     }
-    .last-slot,
-    .second-slot,
-    .first-slot {
+    .slot-3,
+    .slot-2,
+    .slot-1 {
         float: none;
         width: 100%;
         display: block;

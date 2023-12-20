@@ -1,0 +1,27 @@
+query {
+  blogPageCollection{
+    items{
+      createdAt
+      title
+      description
+      tag
+      slug
+      body {
+        json
+      }
+      thumbnail {
+        ... on Asset {
+            url
+            title
+            fileName
+        }
+      }
+      category {
+        ... on Category {
+            id
+            name
+        }
+      }
+    }
+  }
+}

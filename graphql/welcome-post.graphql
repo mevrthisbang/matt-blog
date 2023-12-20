@@ -1,0 +1,24 @@
+query {
+  blogPageCollection (where: {
+    isWelcomePost: true
+  }, order: [sys_firstPublishedAt_DESC]) {
+    items{
+      createdAt
+      title
+      slug
+      thumbnail {
+        ... on Asset {
+            url
+            title
+            fileName
+        }
+      }
+      category {
+        ... on Category {
+            id
+            name
+        }
+      }
+    }
+  }
+}
