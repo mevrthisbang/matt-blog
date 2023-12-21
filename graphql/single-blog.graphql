@@ -1,0 +1,69 @@
+query($slug: String) {
+  blogPageCollection(where: {
+    slug: $slug
+  }, limit: 1){
+    items{
+      createdAt
+      title
+      body {
+        json
+      }
+      slug
+      thumbnail {
+        ... on Asset {
+            url
+            title
+            fileName
+        }
+      }
+      commentsCollection {
+        items {
+            ... on Comment {
+                id
+                content
+                createrName
+                sys {
+                    firstPublishedAt
+                }
+            }
+        }
+      }
+      recommendedPostsCollection(limit:2) {
+        items {
+            ... on BlogPage {
+              title
+              createdAt
+              category {
+                ... on Category {
+                    id
+                    name
+                }
+              }
+              slug
+              thumbnail {
+                ... on Asset {
+                    url
+                    title
+                    fileName
+                }
+              }
+            }
+        }
+      }
+      category {
+        ... on Category {
+            id
+            name
+        }
+      }
+      tagCollection {
+        items {
+            ... on Tag {
+                id
+                tag
+            }
+        }
+      }
+    }
+  }
+}

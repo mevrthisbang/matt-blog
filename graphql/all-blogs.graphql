@@ -4,11 +4,7 @@ query {
       createdAt
       title
       description
-      tag
       slug
-      body {
-        json
-      }
       thumbnail {
         ... on Asset {
             url

@@ -1,0 +1,5 @@
+query($id: String!) {
+  asset(id: $id){
+     url
+  }
+}

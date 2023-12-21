@@ -57,7 +57,7 @@
                                     <div class="blog-meta">
                                         <span class="bg-orange"><a href="#"
                                                                    title="">{{ welcome_blog.category.name }}</a></span>
-                                        <h4><a href="#" title="">{{ welcome_blog.title }}</a></h4>
+                                        <h4><a href="{{ url_for("get_blog", slug=welcome_blog.slug) }}" title="">{{ welcome_blog.title }}</a></h4>
                                         <small><a href="#" title="">{{ welcome_blog.createdAt }}</a></small>
                                         <small><a href="#" title="">by Matt - HGTP</a></small>
                                     </div><!-- end meta -->
@@ -84,7 +84,7 @@
                                 <div class="blog-box row">
                                 <div class="col-md-4">
                                     <div class="post-media" style="width: 380px;height:300px;display: flex;flex-direction: column;justify-content: center;align-items: center;">
-                                        <a href="tech-single.html" title="">
+                                        <a href="blog.html" title="">
                                             <img src="{{ blog.thumbnail.url }}" alt="" class="img-fluid">
                                             <div class="hovereffect"></div>
                                         </a>
@@ -92,13 +92,13 @@
                                 </div><!-- end col -->
 
                                 <div class="blog-meta big-meta col-md-8">
-                                    <h4><a href="tech-single.html" title="">{{ blog.title }}</a></h4>
+                                    <h4><a href="blog.html" title="">{{ blog.title }}</a></h4>
                                     <p style="margin-top: 5px; margin-left: 5%;">{{ blog.description }}</p>
                                     <small class="firstsmall" style="margin-left: 5%;"><a class="bg-orange" href="tech-category-01.html"
-                                                                 title="">{{ blog.tag }}</a></small>
-                                    <small><a href="tech-single.html" title="">{{ blog.createdAt }}</a></small>
+                                                                 title="">{{ blog.category.name }}</a></small>
+                                    <small><a href="blog.html" title="">{{ blog.createdAt }}</a></small>
                                     <small><a href="tech-author.html" title="">by Matt - HGTP</a></small>
-                                    <small><a href="tech-single.html" title=""><i class="fa fa-eye"></i>
+                                    <small><a href="blog.html" title=""><i class="fa fa-eye"></i>
                                         1114</a></small>
                                 </div><!-- end meta -->
                             </div><!-- end blog-box -->
@@ -136,7 +136,7 @@
                 {#                                <div class="trend-videos">#}
                 {#                                    <div class="blog-box">#}
                 {#                                        <div class="post-media">#}
-                {#                                            <a href="tech-single.html" title="">#}
+                {#                                            <a href="blog.html" title="">#}
                 {#                                                <img src="upload/tech_video_01.jpg" alt="" class="img-fluid">#}
                 {#                                                <div class="hovereffect">#}
                 {#                                                    <span class="videohover"></span>#}
@@ -144,7 +144,7 @@
                 {#                                            </a>#}
                 {#                                        </div><!-- end media -->#}
                 {#                                        <div class="blog-meta">#}
-                {#                                            <h4><a href="tech-single.html" title="">We prepared the best 10 laptop presentations for you</a></h4>#}
+                {#                                            <h4><a href="blog.html" title="">We prepared the best 10 laptop presentations for you</a></h4>#}
                 {#                                        </div><!-- end meta -->#}
                 {#                                    </div><!-- end blog-box -->#}
                 {##}
@@ -152,7 +152,7 @@
                 {##}
                 {#                                    <div class="blog-box">#}
                 {#                                        <div class="post-media">#}
-                {#                                            <a href="tech-single.html" title="">#}
+                {#                                            <a href="blog.html" title="">#}
                 {#                                                <img src="upload/tech_video_02.jpg" alt="" class="img-fluid">#}
                 {#                                                <div class="hovereffect">#}
                 {#                                                    <span class="videohover"></span>#}
@@ -160,7 +160,7 @@
                 {#                                            </a>#}
                 {#                                        </div><!-- end media -->#}
                 {#                                        <div class="blog-meta">#}
-                {#                                            <h4><a href="tech-single.html" title="">We are guests of ABC Design Studio - Vlog</a></h4>#}
+                {#                                            <h4><a href="blog.html" title="">We are guests of ABC Design Studio - Vlog</a></h4>#}
                 {#                                        </div><!-- end meta -->#}
                 {#                                    </div><!-- end blog-box -->#}
                 {##}
@@ -168,7 +168,7 @@
                 {##}
                 {#                                    <div class="blog-box">#}
                 {#                                        <div class="post-media">#}
-                {#                                            <a href="tech-single.html" title="">#}
+                {#                                            <a href="blog.html" title="">#}
                 {#                                                <img src="upload/tech_video_03.jpg" alt="" class="img-fluid">#}
                 {#                                                <div class="hovereffect">#}
                 {#                                                    <span class="videohover"></span>#}
@@ -176,7 +176,7 @@
                 {#                                            </a>#}
                 {#                                        </div><!-- end media -->#}
                 {#                                        <div class="blog-meta">#}
-                {#                                            <h4><a href="tech-single.html" title="">Both blood pressure monitor and intelligent clock</a></h4>#}
+                {#                                            <h4><a href="blog.html" title="">Both blood pressure monitor and intelligent clock</a></h4>#}
                 {#                                        </div><!-- end meta -->#}
                 {#                                    </div><!-- end blog-box -->#}
                 {#                                </div><!-- end videos -->#}
@@ -186,7 +186,7 @@
                 {#                                <h2 class="widget-title">Popular Posts</h2>#}
                 {#                                <div class="blog-list-widget">#}
                 {#                                    <div class="list-group">#}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_08.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">5 Beautiful buildings you need..</h5>#}
@@ -194,7 +194,7 @@
                 {#                                            </div>#}
                 {#                                        </a>#}
                 {##}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_01.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">Let's make an introduction for..</h5>#}
@@ -202,7 +202,7 @@
                 {#                                            </div>#}
                 {#                                        </a>#}
                 {##}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 last-item justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_03.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">Did you see the most beautiful..</h5>#}
@@ -217,7 +217,7 @@
                 {#                                <h2 class="widget-title">Recent Reviews</h2>#}
                 {#                                <div class="blog-list-widget">#}
                 {#                                    <div class="list-group">#}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_02.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">Banana-chip chocolate cake recipe..</h5>#}
@@ -231,7 +231,7 @@
                 {#                                            </div>#}
                 {#                                        </a>#}
                 {##}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_03.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">10 practical ways to choose organic..</h5>#}
@@ -245,7 +245,7 @@
                 {#                                            </div>#}
                 {#                                        </a>#}
                 {##}
-                {#                                        <a href="tech-single.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
+                {#                                        <a href="blog.html" class="list-group-item list-group-item-action flex-column align-items-start">#}
                 {#                                            <div class="w-100 last-item justify-content-between">#}
                 {#                                                <img src="upload/tech_blog_07.jpg" alt="" class="img-fluid float-left">#}
                 {#                                                <h5 class="mb-1">We are making homemade ravioli..</h5>#}
