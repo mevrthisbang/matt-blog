@@ -13,10 +13,11 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
-<meta property="og:url"           content="{{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" />
-<meta property="og:type"          content="website" />
-<meta property="og:title"         content="{{ blog.title }}" />
-<meta property="og:image"         content="{{ blog.thumbnail.url }}" />
+<meta property="og:url" content="{{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"/>
+<meta property="og:description" content="{{ blog.description }}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="{{ blog.title }}"/>
+<meta property="og:image" content="{{ blog.thumbnail.url }}"/>
 <!-- Site Icons -->
 <link rel="shortcut icon" href="{{ url_for('static',filename='images/electric-guitar.ico') }}" type="image/x-icon"/>
 <link rel="apple-touch-icon" href="{{ url_for('static',filename='images/electric-guitar.png') }}">
@@ -68,17 +69,14 @@
                             <div class="blog-meta big-meta">
                                 <small><a href="blog.html" title="">{{ blog.createdAt }}</a></small>
                                 <small><a href="tech-author.html" title="">by Matt - HGTP</a></small>
-                                <small><i class="fa fa-eye"></i> 2344</small>
                             </div><!-- end meta -->
 
                             <div class="post-sharing">
                                 <ul class="list-inline">
-                                    <li><a href="#" class="fb-button btn btn-primary"><i class="fa fa-facebook"></i>
+                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="fb-button btn btn-primary"><i class="fa fa-facebook"></i>
                                         <span class="down-mobile">Share on Facebook</span></a></li>
-                                    <li><a href="#" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
+                                    <li><a href="https://twitter.com/share?url={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
                                         <span class="down-mobile">Tweet on Twitter</span></a></li>
-                                    <li><a href="#" class="gp-button btn btn-primary"><i class="fa fa-google-plus"></i></a>
-                                    </li>
                                 </ul>
                             </div><!-- end post-sharing -->
                         </div><!-- end title -->
@@ -98,12 +96,11 @@
                             <div class="post-sharing">
                                 <ul class="list-inline">
                                     <li><a class="fb-button btn btn-primary"
-href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" ><i class="fa fa-facebook"></i>
+                                           href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
+                                           target="_blank"><i class="fa fa-facebook"></i>
                                         <span class="down-mobile">Share on Facebook</span></a></li>
-                                    <li><a href="#" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
+                                    <li><a href="https://twitter.com/share?url={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
                                         <span class="down-mobile">Tweet on Twitter</span></a></li>
-                                    <li><a href="#" class="gp-button btn btn-primary"><i class="fa fa-google-plus"></i></a>
-                                    </li>
                                 </ul>
                             </div><!-- end post-sharing -->
                         </div><!-- end title -->
@@ -113,7 +110,8 @@ href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{
                                 <div class="banner-spot clearfix">
                                     <div class="banner-img">
                                         <img src="{{ url_for("static", filename="images/48ea50f38b1ccffe58e89a52fc0e7084.jpg") }}"
-                                             alt="" class="img-fluid" style="height: 100px;object-position: bottom;object-fit: cover;">
+                                             alt="" class="img-fluid"
+                                             style="height: 100px;object-position: bottom;object-fit: cover;">
                                     </div><!-- end banner-img -->
                                 </div><!-- end banner -->
                             </div><!-- end col -->
@@ -125,7 +123,8 @@ href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{
                             <h4 class="small-title">About author</h4>
                             <div class="row">
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                    <img src="{{ url_for("static", filename="images/a53cbc72-5c14-473a-9168-73bb50336618.jpeg") }}" alt="" class="img-fluid rounded-circle">
+                                    <img src="{{ url_for("static", filename="images/a53cbc72-5c14-473a-9168-73bb50336618.jpeg") }}"
+                                         alt="" class="img-fluid rounded-circle">
                                 </div><!-- end col -->
 
                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
@@ -136,13 +135,17 @@ href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{
                                         Blog!</p>
 
                                     <div class="topsocial">
-                                        <a href="https://github.com/mevrthisbang" target=”_blank” data-toggle="tooltip" data-placement="bottom" title="Github"><i
+                                        <a href="https://github.com/mevrthisbang" target=”_blank” data-toggle="tooltip"
+                                           data-placement="bottom" title="Github"><i
                                                 class="fa fa-github"></i></a>
-                                        <a href="https://www.linkedin.com/in/mevrthisbang/" target=”_blank” data-toggle="tooltip" data-placement="bottom" title="Linkedin"><i
+                                        <a href="https://www.linkedin.com/in/mevrthisbang/" target=”_blank”
+                                           data-toggle="tooltip" data-placement="bottom" title="Linkedin"><i
                                                 class="fa fa-linkedin"></i></a>
-                                        <a href="mailto:phuchgt.work@gmail.com" target=”_blank” data-toggle="tooltip" data-placement="bottom" title="Mail"><i
+                                        <a href="mailto:phuchgt.work@gmail.com" target=”_blank” data-toggle="tooltip"
+                                           data-placement="bottom" title="Mail"><i
                                                 class="fa fa-envelope"></i></a>
-                                        <a href="https://www.youtube.com/channel/UC0l_B2bNOqeLHWtBbNjtvOQ" data-toggle="tooltip" data-placement="bottom" title="Youtube"><i
+                                        <a href="https://www.youtube.com/channel/UC0l_B2bNOqeLHWtBbNjtvOQ" target=”_blank”
+                                           data-toggle="tooltip" data-placement="bottom" title="Youtube"><i
                                                 class="fa fa-youtube"></i></a>
                                     </div><!-- end social -->
 
@@ -194,10 +197,13 @@ href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{
                             <h4 class="small-title">Leave a Comment</h4>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <form class="form-wrapper" method="POST" action="/post-comment" onsubmit="postComment(this)">
-                                        <input type="text" class="form-control" placeholder="Your name" name="name" required>
+                                    <form class="form-wrapper" method="POST" action="/post-comment"
+                                          onsubmit="postComment(this)">
+                                        <input type="text" class="form-control" placeholder="Your name" name="name"
+                                               required>
                                         <input type="hidden" name="blog_id" value="{{ blog.sys.id }}">
-                                        <textarea class="form-control" placeholder="Your comment" name="content" required></textarea>
+                                        <textarea class="form-control" placeholder="Your comment" name="content"
+                                                  required></textarea>
                                         <button type="submit" class="btn btn-primary">Post</button>
                                     </form>
                                 </div>
@@ -238,8 +244,6 @@ href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{
             </div><!-- end container -->
         </div>
     </section>
-
-
 
 
     {% include "footer.html" %}
