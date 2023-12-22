@@ -1,9 +1,14 @@
 import glob
 import json
 import os
+import time
+import uuid
 from datetime import datetime
+
+import contentful_management
 import requests
-from flask import Flask, render_template, redirect
+from contentful_management import Link
+from flask import Flask, render_template, redirect, request
 from flask_env import MetaFlaskEnv
 from rich_text_renderer.block_renderers import HeadingOneRenderer, HeadingTwoRenderer, HeadingThreeRenderer, \
     HeadingFourRenderer, HeadingFiveRenderer, HeadingSixRenderer, BlockQuoteRenderer, HyperlinkRenderer, \
@@ -19,9 +24,10 @@ from custom_renderer import CustomAssetBlockRenderer
 
 
 class Configuration(metaclass=MetaFlaskEnv):
-    SPACE_ID = "oesxxxx"
-    ACCESS_TOKEN = "xxxxx"
-
+    SPACE_ID = "oexxx"
+    ACCESS_TOKEN = "Dxxx"
+    MANAGEMENT_TOKEN = "Cxxxx"
+    ENVIRONMENT_ID = "xxxx"
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -36,13 +42,17 @@ for filename in list_graphql_files:
     with open(os.path.join(graphql_folder, filename), 'r') as f:
         graphql[os.path.basename(filename)] = f.read()
 
+management_client = contentful_management.Client(app.config['MANAGEMENT_TOKEN'])
+environment = management_client.environments(app.config["SPACE_ID"]).find(app.config["ENVIRONMENT_ID"])
+
+
 @app.template_filter()
 def format_datetime(value, format="%d %b, %Y"):
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").strftime(format)
 
+
 @app.route('/')
 def index():  # put application's code here
-    # welcome_blogs = client.entries({"content_type": "blogPage", "fields.isWelcomePost": "true", "include": 10})
     welcome_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("welcome-post")]}, headers=headers)
     welcome_blogs = json.loads(welcome_blogs_response.text)["data"]["blogPageCollection"]["items"]
     all_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("all-blogs")]}, headers=headers)
@@ -52,8 +62,10 @@ def index():  # put application's code here
 @app.route('/assets/<string:id>', methods=["GET"])
 def get_asset(id):
     asset_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("asset")], "variables": {"id": id}}, headers=headers)
-    assest = json.loads(asset_response.text)["data"]["asset"]["url"]
-    return redirect(assest)
+    asset = json.loads(asset_response.text)["data"]["asset"]["url"]
+    return redirect(asset)
+
+
 @app.route('/blog/<string:slug>', methods=["GET"])
 def get_blog(slug):
     blog_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("single-blog")], "variables": {"slug": slug}}, headers=headers)
@@ -88,4 +100,48 @@ def get_blog(slug):
         None: NullRenderer,
     })
     rendered_content = renderer.render(blog["body"]["json"])
-    return render_template("blog.html", blog=blog, rendered_content=rendered_content)
+    return render_template("blog.html", blog=blog, rendered_content=rendered_content, comments=blog["commentsCollection"]["items"])
+
+
+@app.route('/post-comment', methods=["POST"])
+def add_comment():
+    comment_attributes = {
+        'content_type_id': 'comment',
+        'fields': {
+            'content': {
+                'en-US': request.form.get("content")
+            },
+            'createrName': {
+                'en-US': request.form.get("name")
+            }
+        }
+    }
+    new_comment = environment.entries().create(
+        str(uuid.uuid4()),
+        comment_attributes
+    )
+    new_comment.publish()
+    blog_entry = environment.entries().find(request.form.get("blog_id"))
+    new_comment_link = Link({
+        "sys": {
+            "id": new_comment.sys["id"],
+            "linkType": "Entry",
+            "type": "Link"
+        }})
+    try:
+        blog_comments = blog_entry.fields('en-US')['comments']
+    except:
+        blog_comments = []
+    blog_comments.append(new_comment_link)
+    blog_entry.comments = blog_comments
+    blog_entry.save()
+    blog_entry.publish()
+    blog_comments_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("comments-of-blog")],
+                                                  "variables": {"id": request.form.get("blog_id")}}, headers=headers)
+    comments = json.loads(blog_comments_response.text)["data"]["blogPageCollection"]["items"][0]["commentsCollection"]["items"]
+    return render_template("comment-section.html", comments=comments)
+
+
+@app.route('/contact', methods=["GET","POST"])
+def contact():
+    pass

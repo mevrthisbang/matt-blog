@@ -1,0 +1,18 @@
+query($id: String) {
+  blogPageCollection(where: {
+    sys: { id: $id } }, limit: 1){
+    items{
+      commentsCollection {
+        items {
+            ... on Comment {
+                content
+                createrName
+                sys {
+                    firstPublishedAt
+                }
+            }
+        }
+      }
+    }
+  }
+}

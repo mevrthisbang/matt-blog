@@ -1,6 +1,6 @@
 Flask==3.0.0
 Gunicorn==21.2.0
-contentful==2.1.1
 Flask-Env==2.0.0
 requests
 rich_text_renderer
+contentful_management

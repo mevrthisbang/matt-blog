@@ -3,6 +3,9 @@ query($slug: String) {
     slug: $slug
   }, limit: 1){
     items{
+      sys {
+        id
+      }
       createdAt
       title
       body {
@@ -19,7 +22,6 @@ query($slug: String) {
       commentsCollection {
         items {
             ... on Comment {
-                id
                 content
                 createrName
                 sys {
@@ -35,7 +37,9 @@ query($slug: String) {
               createdAt
               category {
                 ... on Category {
-                    id
+                    sys {
+                        id
+                    }
                     name
                 }
               }
@@ -52,14 +56,18 @@ query($slug: String) {
       }
       category {
         ... on Category {
-            id
+            sys {
+                id
+            }
             name
         }
       }
       tagCollection {
         items {
             ... on Tag {
-                id
+                sys {
+                    id
+                }
                 tag
             }
         }
