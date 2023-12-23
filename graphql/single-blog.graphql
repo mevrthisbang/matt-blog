@@ -38,9 +38,7 @@ query($slug: String) {
               createdAt
               category {
                 ... on Category {
-                    sys {
-                        id
-                    }
+                    slug
                     name
                 }
               }
@@ -57,9 +55,7 @@ query($slug: String) {
       }
       category {
         ... on Category {
-            sys {
-                id
-            }
+            slug
             name
         }
       }

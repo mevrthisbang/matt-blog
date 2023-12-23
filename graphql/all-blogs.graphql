@@ -14,9 +14,7 @@ query {
       }
       category {
         ... on Category {
-            sys {
-                id
-            }
+            slug
             name
         }
       }

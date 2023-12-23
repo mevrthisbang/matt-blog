@@ -1,0 +1,36 @@
+query($slug: String) {
+  categoryCollection(where: {
+    slug: $slug
+    }, limit: 1){
+    items{
+      name
+      slug
+      linkedFrom {
+        blogPageCollection {
+          items {
+              createdAt
+              title
+              description
+              slug
+              thumbnail {
+                ... on Asset {
+                    url
+                    title
+                    fileName
+                }
+              }
+              category {
+                ... on Category {
+                    slug
+                    sys {
+                        id
+                    }
+                    name
+                }
+              }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+query {
+  categoryCollection{
+    items{
+      name
+      slug
+    }
+  }
+}

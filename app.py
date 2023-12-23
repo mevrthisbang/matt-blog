@@ -1,7 +1,6 @@
 import glob
 import json
 import os
-import time
 import uuid
 from datetime import datetime
 
@@ -45,6 +44,11 @@ for filename in list_graphql_files:
 management_client = contentful_management.Client(app.config['MANAGEMENT_TOKEN'])
 environment = management_client.environments(app.config["SPACE_ID"]).find(app.config["ENVIRONMENT_ID"])
 
+def get_categories():
+    categories_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("categories")]},
+                                        headers=headers)
+    categories = json.loads(categories_response.text)["data"]["categoryCollection"]["items"]
+    return categories
 
 @app.template_filter()
 def format_datetime(value, format="%d %b, %Y"):
@@ -53,11 +57,13 @@ def format_datetime(value, format="%d %b, %Y"):
 
 @app.route('/')
 def index():  # put application's code here
+    # welcome_blogs = client.entries({"content_type": "blogPage", "fields.isWelcomePost": "true", "include": 10})
     welcome_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("welcome-post")]}, headers=headers)
     welcome_blogs = json.loads(welcome_blogs_response.text)["data"]["blogPageCollection"]["items"]
     all_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("all-blogs")]}, headers=headers)
     all_blogs = json.loads(all_blogs_response.text)["data"]["blogPageCollection"]["items"]
-    return render_template("index.html", welcome_blogs=welcome_blogs, all_blogs=all_blogs)
+    categories = get_categories()
+    return render_template("index.html", welcome_blogs=welcome_blogs, all_blogs=all_blogs, categories=categories)
 
 @app.route('/assets/<string:id>', methods=["GET"])
 def get_asset(id):
@@ -100,7 +106,8 @@ def get_blog(slug):
         None: NullRenderer,
     })
     rendered_content = renderer.render(blog["body"]["json"])
-    return render_template("blog.html", blog=blog, rendered_content=rendered_content, comments=blog["commentsCollection"]["items"])
+    categories = get_categories()
+    return render_template("blog.html", blog=blog, rendered_content=rendered_content, comments=blog["commentsCollection"]["items"], categories=categories)
 
 
 @app.route('/post-comment', methods=["POST"])
@@ -141,7 +148,17 @@ def add_comment():
     comments = json.loads(blog_comments_response.text)["data"]["blogPageCollection"]["items"][0]["commentsCollection"]["items"]
     return render_template("comment-section.html", comments=comments)
 
-
-@app.route('/contact', methods=["GET","POST"])
-def contact():
-    pass
+@app.route('/blog/category/<string:slug>', methods=["GET"])
+def get_blog_by_category(slug):
+    category = None
+    all_blogs = None
+    if slug == "#":
+        all_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("all-blogs")]},
+                                           headers=headers)
+        all_blogs = json.loads(all_blogs_response.text)["data"]["blogPageCollection"]["items"]
+    else:
+        category_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("category")],
+                                                      "variables": {"slug": slug}}, headers=headers)
+        category = json.loads(category_response.text)["data"]["categoryCollection"]["items"][0]
+    categories = get_categories()
+    return render_template("category.html", category=category, blogs=all_blogs, categories=categories)
