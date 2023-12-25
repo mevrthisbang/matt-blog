@@ -21,7 +21,7 @@
                                     <div class="mega-menu-content clearfix">
                                         <div class="tab" style="margin-top: -15px">
                                             {% for category in categories %}
-                                                <button class="tablinks" onclick="window.location.href='{{ url_for("get_blog_by_category", slug=category.slug) }}'">{{ category.name }}</button>
+                                                <button class="tablinks" onclick="window.location.href='{{ url_for("search_blogs", category=category.slug) }}'">{{ category.name }}</button>
                                             {% endfor %}
                                         </div>
                                     </div><!-- end mega-menu-content -->
@@ -30,6 +30,9 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-2">
+                    <li class="nav-item" style="display: flex;justify-content: center;vertical-align: top;flex-direction: column;">
+                        <input id="search-textbox" type="text" placeholder="&#xf002; Search" style="font-family:Arial, FontAwesome;background: transparent;border: 0.3px solid white;border-radius: 12px;margin-right: 10px;color: white; padding-left: 12px;"/>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link rainbow-text" href="https://www.linkedin.com/in/mevrthisbang/" target=”_blank”><i
                                 class="fa fa-linkedin"></i></a>

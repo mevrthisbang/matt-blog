@@ -5,7 +5,7 @@
             {% for comment in comments %}
                 <div class="media {% if loop.last %} last-child {% endif %}">
                     <a class="media-left" href="#">
-                        <img src="upload/author.jpg" alt="" class="rounded-circle">
+                        <img src="{{ url_for("static", filename="images/author.jpg") }}" alt="" class="rounded-circle">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading user_name">{{ comment.createrName }}

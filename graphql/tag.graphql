@@ -1,9 +1,9 @@
-query($slug: String, $limit: Int!, $skip: Int!) {
-  categoryCollection(where: {
+query($slug: String, $limit: Int!, $skip: Int!){
+  tagCollection(where: {
     slug: $slug
     }, limit: 1){
     items{
-      name
+      tag
       slug
       linkedFrom {
         blogPageCollection(limit: $limit, skip: $skip) {

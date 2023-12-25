@@ -765,7 +765,6 @@ div.tab button:hover {
 }
 
 .page-link {
-    background-color: #edeff2 !important;
     border: 0 dashed #e2e2e2;
     border-radius: 0;
     color: #a3a5a8 !important;
@@ -1263,11 +1262,6 @@ hr.invis3 {
     filter: alpha(opacity=0);
     opacity: 0;
 }
-
-.hovereffect span.videohover::before {
-    content: url(images/videohover.png);
-}
-
 .blog-list .blog-meta.big-meta h4 {
     margin-left: -5%;
     margin-top: 1rem;

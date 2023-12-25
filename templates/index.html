@@ -39,6 +39,7 @@
 <!-- Version Tech CSS for this template -->
 <link href="{{ url_for('static',filename='css/version/tech.css') }}" rel="stylesheet">
 
+
 </head>
 <body>
 
@@ -56,7 +57,7 @@
                                 <div class="shadow-desc">
                                     <div class="blog-meta">
                                         <span class="bg-orange"><a
-                                                href="{{ url_for("get_blog_by_category", slug=welcome_blog.category.slug) }}"
+                                                href="{{ url_for("search_blogs", category=welcome_blog.category.slug) }}"
                                                 title="">{{ welcome_blog.category.name }}</a></span>
                                         <h4><a href="{{ url_for("get_blog", slug=welcome_blog.slug) }}"
                                                title="">{{ welcome_blog.title }}</a></h4>
@@ -82,7 +83,7 @@
                         </div><!-- end blog-top -->
 
                         <div class="blog-list clearfix">
-                            {% for blog in all_blogs %}
+                            {% for blog in all_blogs["items"] %}
                                 <div class="blog-box row">
                                     <div class="col-md-4">
                                         <div class="post-media"
@@ -99,7 +100,7 @@
                                                title="">{{ blog.title }}</a></h4>
                                         <p style="margin-top: 5px; margin-left: 5%;">{{ blog.description }}</p>
                                         <small class="firstsmall" style="margin-left: 5%;"><a class="bg-orange"
-                                                                                              href="{{ url_for("get_blog_by_category", slug=blog.category.slug) }}"
+                                                                                              href="{{ url_for("search_blogs", category=blog.category.slug) }}"
                                                                                               title="">{{ blog.category.name }}</a></small>
                                         <small>{{ blog.createdAt }}</small>
                                         <small>by Matt - HGTP</small>
@@ -112,12 +113,42 @@
                                 <div class="col-md-12">
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-start">
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">Next</a>
-                                            </li>
+                                            {% if all_blogs.total_page > 1 %}
+                                                {% if all_blogs.current_page > 1 %}
+                                                    <li class="page-item"><a style="background-color: #edeff2"
+                                                                             class="page-link"
+                                                                             href="{{ url_for("index", page=1) }}">
+                                                        << </a></li>
+                                                    <li class="page-item"><a style="background-color: #edeff2"
+                                                                             class="page-link"
+                                                                             href="{{ url_for("index", page=all_blogs.current_page - 1) }}">
+                                                        Previous </a></li>{% endif %}
+                                                {% for page_num in range(all_blogs.total_page) %}
+                                                    {% if all_blogs.current_page == page_num + 1 %}
+                                                        <li class="page-item"><a
+                                                                style="background-color: #000000;color: white"
+                                                                class="page-link"
+                                                                href="{{ url_for("index", page=page_num + 1) }}">{{ page_num + 1 }}</a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="page-item"><a style="background-color: #edeff2"
+                                                                                 class="page-link"
+                                                                                 href="{{ url_for("index", page=page_num + 1) }}">{{ page_num + 1 }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if all_blogs.current_page < all_blogs.total_page %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" style="background-color: #edeff2"
+                                                           href="{{ url_for("index", page=all_blogs.current_page + 1) }}">Next</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" style="background-color: #edeff2"
+                                                           href="{{ url_for("index", page=all_blogs.total_page) }}"> >> </a>
+                                                    </li>
+                                                {% endif %}
+
+                                            {% endif %}
                                         </ul>
                                     </nav>
                                 </div><!-- end col -->
@@ -320,9 +351,11 @@
 
 <!-- Core JavaScript
 ================================================== -->
+<script src="{{ url_for('static',filename='js/ajax351jquery.min.js') }}"></script>
 <script src="{{ url_for("static", filename="js/tether.min.js") }}"></script>
 <script src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
 <script src="{{ url_for("static", filename="js/custom.js") }}"></script>
+<script src="{{ url_for("static", filename="js/blog.js") }}"></script>
 
 </body>
 </html>

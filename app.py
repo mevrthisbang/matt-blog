@@ -1,8 +1,10 @@
 import glob
 import json
+import math
 import os
 import uuid
 from datetime import datetime
+from functools import wraps
 
 import contentful_management
 import requests
@@ -27,6 +29,7 @@ class Configuration(metaclass=MetaFlaskEnv):
     ACCESS_TOKEN = "Dxxx"
     MANAGEMENT_TOKEN = "Cxxxx"
     ENVIRONMENT_ID = "xxxx"
+    PAGE_SIZE = "5"
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -44,38 +47,76 @@ for filename in list_graphql_files:
 management_client = contentful_management.Client(app.config['MANAGEMENT_TOKEN'])
 environment = management_client.environments(app.config["SPACE_ID"]).find(app.config["ENVIRONMENT_ID"])
 
+def error_handler(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(str(e))
+            return render_template("errors.html")
+    return wrapper
+
+def call_graph_api(graphql_query, variables=None):
+    data = {
+        "query": graphql["{}.graphql".format(graphql_query)]
+    }
+    if variables:
+        data["variables"] = variables
+    result = requests.post(endpoint, json=data, headers=headers)
+    response_data = json.loads(result.text)
+    return response_data
+
+
 def get_categories():
-    categories_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("categories")]},
-                                        headers=headers)
-    categories = json.loads(categories_response.text)["data"]["categoryCollection"]["items"]
+    categories_response = call_graph_api("categories")
+    categories = categories_response["data"]["categoryCollection"]["items"]
     return categories
+
 
 @app.template_filter()
 def format_datetime(value, format="%d %b, %Y"):
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").strftime(format)
 
 
+@app.template_filter()
+def remove_keys(query_params_dict, keys):
+    return {x: query_params_dict[x] for x in query_params_dict if x not in keys}
+
+
 @app.route('/')
+@error_handler
 def index():  # put application's code here
-    # welcome_blogs = client.entries({"content_type": "blogPage", "fields.isWelcomePost": "true", "include": 10})
-    welcome_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("welcome-post")]}, headers=headers)
-    welcome_blogs = json.loads(welcome_blogs_response.text)["data"]["blogPageCollection"]["items"]
-    all_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("all-blogs")]}, headers=headers)
-    all_blogs = json.loads(all_blogs_response.text)["data"]["blogPageCollection"]["items"]
+    page_size = int(app.config["PAGE_SIZE"])
+    page = request.args.get("page")
+    if page:
+        page = int(page)
+        offset = (page - 1) * page_size
+    else:
+        page = 1
+        offset = 0
+    welcome_blogs_response = call_graph_api("welcome-post")
+    welcome_blogs = welcome_blogs_response["data"]["blogPageCollection"]["items"]
+    all_blogs_response = call_graph_api("all-blogs", {"limit": page_size, "skip": offset})
+    all_blogs = all_blogs_response["data"]["blogPageCollection"]
+    all_blogs["total_page"] = math.ceil(all_blogs["total"] / page_size)
+    all_blogs["current_page"] = page
     categories = get_categories()
     return render_template("index.html", welcome_blogs=welcome_blogs, all_blogs=all_blogs, categories=categories)
 
+
 @app.route('/assets/<string:id>', methods=["GET"])
 def get_asset(id):
-    asset_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("asset")], "variables": {"id": id}}, headers=headers)
-    asset = json.loads(asset_response.text)["data"]["asset"]["url"]
+    asset_response = call_graph_api("asset", {"id": id})
+    asset = asset_response["data"]["asset"]["url"]
     return redirect(asset)
 
 
 @app.route('/blog/<string:slug>', methods=["GET"])
+@error_handler
 def get_blog(slug):
-    blog_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("single-blog")], "variables": {"slug": slug}}, headers=headers)
-    blog = json.loads(blog_response.text)["data"]["blogPageCollection"]["items"][0]
+    blog_response = call_graph_api("single-blog", {"slug": slug})
+    blog = blog_response["data"]["blogPageCollection"]["items"][0]
     renderer = DocumentRenderer({
         "document": DocumentRenderer,
         "heading-1": HeadingOneRenderer,
@@ -107,19 +148,25 @@ def get_blog(slug):
     })
     rendered_content = renderer.render(blog["body"]["json"])
     categories = get_categories()
-    return render_template("blog.html", blog=blog, rendered_content=rendered_content, comments=blog["commentsCollection"]["items"], categories=categories)
+    return render_template("blog.html", blog=blog, rendered_content=rendered_content,
+                           comments=blog["commentsCollection"]["items"], categories=categories)
 
 
 @app.route('/post-comment', methods=["POST"])
 def add_comment():
+    content = request.form.get("content")
+    name = request.form.get("name")
+    blog_id = request.form.get("blog_id")
+    if not content or not name or not blog_id:
+        return None
     comment_attributes = {
         'content_type_id': 'comment',
         'fields': {
             'content': {
-                'en-US': request.form.get("content")
+                'en-US': content
             },
             'createrName': {
-                'en-US': request.form.get("name")
+                'en-US': name
             }
         }
     }
@@ -128,7 +175,7 @@ def add_comment():
         comment_attributes
     )
     new_comment.publish()
-    blog_entry = environment.entries().find(request.form.get("blog_id"))
+    blog_entry = environment.entries().find(blog_id)
     new_comment_link = Link({
         "sys": {
             "id": new_comment.sys["id"],
@@ -143,22 +190,52 @@ def add_comment():
     blog_entry.comments = blog_comments
     blog_entry.save()
     blog_entry.publish()
-    blog_comments_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("comments-of-blog")],
-                                                  "variables": {"id": request.form.get("blog_id")}}, headers=headers)
-    comments = json.loads(blog_comments_response.text)["data"]["blogPageCollection"]["items"][0]["commentsCollection"]["items"]
+    blog_comments_response = call_graph_api("comments-of-blog", {"id": blog_id})
+    comments = blog_comments_response["data"]["blogPageCollection"]["items"][0]["commentsCollection"]["items"]
     return render_template("comment-section.html", comments=comments)
 
-@app.route('/blog/category/<string:slug>', methods=["GET"])
-def get_blog_by_category(slug):
-    category = None
-    all_blogs = None
-    if slug == "#":
-        all_blogs_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("all-blogs")]},
-                                           headers=headers)
-        all_blogs = json.loads(all_blogs_response.text)["data"]["blogPageCollection"]["items"]
+
+@app.route('/blog/search', methods=["GET"])
+@error_handler
+def search_blogs():
+    category = request.args.get('category')
+    tag = request.args.get("tag")
+    keyword = request.args.get("keyword")
+    page_size = int(app.config["PAGE_SIZE"])
+    page = request.args.get("page")
+    if page:
+        page = int(page)
+        offset = (page - 1) * page_size
     else:
-        category_response = requests.post(endpoint, json={"query": graphql["{}.graphql".format("category")],
-                                                      "variables": {"slug": slug}}, headers=headers)
-        category = json.loads(category_response.text)["data"]["categoryCollection"]["items"][0]
+        page = 1
+        offset = 0
     categories = get_categories()
-    return render_template("category.html", category=category, blogs=all_blogs, categories=categories)
+    if category:
+        category_response = call_graph_api("category", {"slug": category, "limit": page_size, "skip": offset})
+        blogs_by_category = category_response["data"]["categoryCollection"]["items"][0]
+        blogs_by_category["linkedFrom"]["blogPageCollection"]["total_page"] = math.ceil(
+            blogs_by_category["linkedFrom"]["blogPageCollection"]["total"] / page_size)
+        blogs_by_category["linkedFrom"]["blogPageCollection"]["current_page"] = page
+        return render_template("search_blogs.html", blogs_by_category=blogs_by_category, categories=categories)
+    if tag:
+        tag_response = call_graph_api("tag", {"slug": tag, "limit": page_size, "skip": offset})
+        blogs_by_tag = tag_response["data"]["tagCollection"]["items"][0]
+        blogs_by_tag["linkedFrom"]["blogPageCollection"]["total_page"] = math.ceil(
+            blogs_by_tag["linkedFrom"]["blogPageCollection"]["total"] / page_size)
+        blogs_by_tag["linkedFrom"]["blogPageCollection"]["current_page"] = page
+        return render_template("search_blogs.html", blogs_by_tag=blogs_by_tag, categories=categories)
+    if keyword:
+        search_response = call_graph_api("search_blogs", {"keyword": keyword, "limit": page_size,
+                                                                      "skip": offset})
+        blogs_by_keyword = search_response["data"]["blogPageCollection"]
+        blogs_by_keyword["total_page"] = math.ceil(
+            blogs_by_keyword["total"] / page_size)
+        blogs_by_keyword["current_page"] = page
+        return render_template("search_blogs.html", blogs_by_keyword=blogs_by_keyword, keyword=keyword,
+                               categories=categories)
+
+    all_blogs_response = call_graph_api("all-blogs", {"limit": page_size, "skip": offset})
+    all_blogs = all_blogs_response["data"]["blogPageCollection"]
+    all_blogs["total_page"] = math.ceil(all_blogs["total"] / page_size)
+    all_blogs["current_page"] = page
+    return render_template("search_blogs.html", all_blogs=all_blogs, categories=categories)

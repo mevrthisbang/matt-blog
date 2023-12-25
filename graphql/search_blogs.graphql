@@ -1,5 +1,10 @@
-query($limit: Int!, $skip: Int!) {
-  blogPageCollection(limit: $limit, skip: $skip){
+query($keyword: String! ,$limit: Int!, $skip: Int!) {
+  blogPageCollection(where: {
+    OR: [
+      { slug_contains: $keyword },
+      { title_contains: $keyword }
+    ]
+    }, limit: $limit, skip: $skip){
     total
     items{
       createdAt

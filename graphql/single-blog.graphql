@@ -62,9 +62,7 @@ query($slug: String) {
       tagCollection {
         items {
             ... on Tag {
-                sys {
-                    id
-                }
+                slug
                 tag
             }
         }

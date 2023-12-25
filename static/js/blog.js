@@ -24,3 +24,9 @@ async function postComment(form) {
     });
     return true
 }
+
+$('#search-textbox').on('keypress', function (e) {
+         if(e.which === 13){
+             window.location.href =  "/blog/search?keyword=" + e.target.value;
+         }
+});

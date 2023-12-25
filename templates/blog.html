@@ -57,7 +57,7 @@
                         <div class="blog-title-area text-center">
                             <ol class="breadcrumb hidden-xs-down">
                                 <li class="breadcrumb-item"><a href="{{ url_for("index") }}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{{ url_for("get_blog_by_category", slug="#") }}">Blog</a></li>
+                                <li class="breadcrumb-item"><a href="{{ url_for("search_blogs") }}">Blog</a></li>
                                 <li class="breadcrumb-item active">{{ blog.title }}</li>
                             </ol>
 
@@ -89,7 +89,7 @@
                             <div class="tag-cloud-single">
                                 <span>Tags</span>
                                 {% for tag in blog.tagCollection["items"] %}
-                                    <small><a href="#" title="">{{ tag.tag }}</a></small>
+                                    <small><a href="{{ url_for("search_blogs", tag=tag.slug) }}" title="">{{ tag.tag }}</a></small>
                                 {% endfor %}
                             </div><!-- end meta -->
 
