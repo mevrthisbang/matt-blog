@@ -73,9 +73,15 @@
 
                             <div class="post-sharing">
                                 <ul class="list-inline">
-                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="fb-button btn btn-primary"><i class="fa fa-facebook"></i>
+                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=
+                                            {{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
+                                           target="_blank" class="fb-button btn btn-primary"><i
+                                            class="fa fa-facebook"></i>
                                         <span class="down-mobile">Share on Facebook</span></a></li>
-                                    <li><a href="https://twitter.com/share?url={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
+                                    <li><a href="https://twitter.com/share?url=
+                                            {{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
+                                           target="_blank" class="tw-button btn btn-primary"><i
+                                            class="fa fa-twitter"></i>
                                         <span class="down-mobile">Tweet on Twitter</span></a></li>
                                 </ul>
                             </div><!-- end post-sharing -->
@@ -89,17 +95,22 @@
                             <div class="tag-cloud-single">
                                 <span>Tags</span>
                                 {% for tag in blog.tagCollection["items"] %}
-                                    <small><a href="{{ url_for("search_blogs", tag=tag.slug) }}" title="">{{ tag.tag }}</a></small>
+                                    <small><a href="{{ url_for("search_blogs", tag=tag.slug) }}"
+                                              title="">{{ tag.tag }}</a></small>
                                 {% endfor %}
                             </div><!-- end meta -->
 
                             <div class="post-sharing">
                                 <ul class="list-inline">
                                     <li><a class="fb-button btn btn-primary"
-                                           href="https://www.facebook.com/sharer/sharer.php?u={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
+                                           href="https://www.facebook.com/sharer/sharer.php?u=
+                                                   {{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
                                            target="_blank"><i class="fa fa-facebook"></i>
                                         <span class="down-mobile">Share on Facebook</span></a></li>
-                                    <li><a href="https://twitter.com/share?url={{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}" target="_blank" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
+                                    <li><a href="https://twitter.com/share?url=
+                                            {{ request.host_url[:-1] }}{{ url_for(request.endpoint, slug=blog.slug) }}"
+                                           target="_blank" class="tw-button btn btn-primary"><i
+                                            class="fa fa-twitter"></i>
                                         <span class="down-mobile">Tweet on Twitter</span></a></li>
                                 </ul>
                             </div><!-- end post-sharing -->
@@ -129,11 +140,18 @@
 
                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
                                     <h4>Matt - HGTP</h4>
-                                    <p>Quisque sed tristique felis. Lorem amet,
-                                        consectetur adipiscing elit. Phasellus quis mi auctor, tincidunt nisl eget,
-                                        finibus odio. Duis tempus elit quis risus congue feugiat. Thanks for stop Tech
-                                        Blog!</p>
-
+                                    <p>Hi, I'm Matt! On my blog, I share about everything, not only about technology or
+                                        my job as a Software Engineer. Always consider myself as a simple person - but I
+                                        always have many conflicts in my head when choose a "side" for an opinion. I
+                                        hope I can give many sides as possible as I can through my blogs.
+                                    </p>
+                                    <blockquote>
+                                        Don't let your job become your identity
+                                    </blockquote>
+                                    <p>or</p>
+                                    <blockquote>
+                                        Your job is what defines who you are
+                                    </blockquote>
                                     <div class="topsocial">
                                         <a href="https://github.com/mevrthisbang" target=”_blank” data-toggle="tooltip"
                                            data-placement="bottom" title="Github"><i
@@ -144,7 +162,8 @@
                                         <a href="mailto:phuchgt.work@gmail.com" target=”_blank” data-toggle="tooltip"
                                            data-placement="bottom" title="Mail"><i
                                                 class="fa fa-envelope"></i></a>
-                                        <a href="https://www.youtube.com/channel/UC0l_B2bNOqeLHWtBbNjtvOQ" target=”_blank”
+                                        <a href="https://www.youtube.com/channel/UC0l_B2bNOqeLHWtBbNjtvOQ"
+                                           target=”_blank”
                                            data-toggle="tooltip" data-placement="bottom" title="Youtube"><i
                                                 class="fa fa-youtube"></i></a>
                                     </div><!-- end social -->
