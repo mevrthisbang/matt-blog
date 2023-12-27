@@ -98,7 +98,7 @@
                                     <div class="blog-meta big-meta col-md-8">
                                         <h4><a href="{{ url_for("get_blog", slug=blog.slug) }}"
                                                title="">{{ blog.title }}</a></h4>
-                                        <p style="margin-top: 5px; margin-left: 5%;">{{ blog.description }}</p>
+                                        <p style="margin-top: 5px; margin-left: 5%;white-space: pre-line;">{{ blog.description }}</p>
                                         <small class="firstsmall" style="margin-left: 5%;"><a class="bg-orange"
                                                                                               href="{{ url_for("search_blogs", category=blog.category.slug) }}"
                                                                                               title="">{{ blog.category.name }}</a></small>
