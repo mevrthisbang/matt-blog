@@ -64,25 +64,25 @@ h6:hover a {
 }
 
 h1 {
-    font-size: 32px;
+    font-size: 33px;
     line-height: 40px;
     margin-bottom: 23px
 }
 
 h2 {
-    font-size: 27px;
+    font-size: 30px;
     line-height: 38px;
     margin-bottom: 20px
 }
 
 h3 {
-    font-size: 22px;
+    font-size: 27px;
     line-height: 30px;
     margin-bottom: 17px
 }
 
 h4 {
-    font-size: 19px;
+    font-size: 24px;
     line-height: 29px;
     margin-bottom: 14px
 }
@@ -110,7 +110,7 @@ p {
 
 p {
     margin-bottom: 26px;
-    font-size: 18px;
+    font-size: 25px;
     line-height: 26px;
 }
 
@@ -579,7 +579,7 @@ div.tab button:hover {
 .masonry-box .blog-meta span {
     background-color: #111111;
     border-radius: 3px;
-    font-size: 12px;
+    font-size: 18px;
     padding: 0.1rem 1rem;
 }
 
@@ -760,7 +760,7 @@ div.tab button:hover {
 
 .breadcrumb-item {
     float: none;
-    font-size: 15px;
+    font-size: 22px;
     display: inline-block;
 }
 
@@ -931,7 +931,7 @@ div.tab button:hover {
 }
 
 .blog-title-area .blog-meta a {
-    font-size: 10px;
+    font-size: 16px;
     font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -947,6 +947,7 @@ div.tab button:hover {
 .blog-title-area span {
     margin: 0.5rem 0;
     display: block;
+    font-size: 20px;
 }
 
 .blog-title-area span a {
@@ -956,7 +957,7 @@ div.tab button:hover {
 }
 
 .blog-title-area h3 {
-    font-size: 41px;
+    font-size: 60px;
     line-height: 50px;
     margin-bottom: 7px;
     margin-top: 0;
@@ -976,7 +977,7 @@ div.tab button:hover {
 .comments-list .media-right,
 .comments-list small {
     color: #999 !important;
-    font-size: 11px;
+    font-size: 16px;
     letter-spacing: 2px;
     margin-top: 5px;
     padding-left: 10px;
@@ -1026,7 +1027,7 @@ div.tab button:hover {
 
 .small-title {
     background: #edeff2 none repeat scroll 0 0;
-    font-size: 16px;
+    font-size: 18px;
     left: 5%;
     line-height: 1;
     margin: 0;
@@ -1100,7 +1101,7 @@ div.tab button:hover {
 .blog-meta h4 {
     padding: 1rem 0 0.5rem;
     margin: 0;
-    font-size: 21px;
+    font-size: 30px;
 }
 
 .blog-meta.big-meta h4 {
@@ -1115,7 +1116,7 @@ div.tab button:hover {
 }
 
 .blog-meta small {
-    font-size: 14px;
+    font-size: 18px;
     display: inline-block;
     margin-bottom: 0;
     padding-bottom: 0;
@@ -1348,7 +1349,7 @@ hr.invis3 {
     background: #fff none repeat scroll 0 0;
     border: 1px dashed #dadada;
     border-radius: 0;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0.3px;
@@ -1607,7 +1608,7 @@ hr.invis3 {
     background-color: #111111;
     border: 0 none;
     border-radius: 0;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
     padding: 0.8rem 2rem;
     text-transform: none;
@@ -1791,7 +1792,6 @@ left:0;top:40%;
 blockquote{
   font-size: 1.4em;
   margin:30px auto;
-  font-family:Open Sans;
   font-style:italic;
   color: #555555;
   padding:1.2em 30px 1.2em 50px;
@@ -1802,7 +1802,6 @@ blockquote{
 }
 
 blockquote::before{
-  font-family:Arial;
   content: "\201C";
   color:#78C0A8;
   font-size:4em;

@@ -23,7 +23,7 @@ body,
 .dropdown-item,
 .form-control,
 p {
-    font-family: 'Poppins', serif !important;
+    font-family: 'Dosis', serif !important;
 }
 
 h1,
@@ -37,7 +37,7 @@ h5 {
 .navbar-inverse .navbar-nav .nav-link,
 .navbar-nav .nav-link {
     color: #ffffff !important;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
@@ -79,7 +79,7 @@ h5 {
 }
 
 .slot-1 .blog-meta h4 {
-    font-size: 31px;
+    font-size: 35px;
     line-height: 1.4;
 }
 
@@ -89,7 +89,7 @@ h5 {
 }
 
 .blog-meta.big-meta h4 {
-    font-size: 24px;
+    font-size: 30px;
 }
 
 .single-wrapper {
@@ -235,7 +235,7 @@ h5 {
 }
 
 .blog-title-area span a {
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .pp .float-right {
