@@ -1813,3 +1813,12 @@ blockquote::before{
 blockquote::after{
   content: '';
 }
+.blog-content img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+    height: 600px;
+}
+.blog-content h6 {
+    text-align: center;
+}
