@@ -1820,27 +1820,27 @@ blockquote::after{
 }
 @media only screen and (max-width: 600px) {
 .blog-content img{
-  height:200px;
+  max-height:200px;
   }
 }
 @media only screen and (min-width: 600px) {
 .blog-content img{
-  height:300px;
+  max-height:300px;
   }
 }
 @media only screen and (min-width: 768px) {
 .blog-content img{
-  height:400px;
+  max-height:400px;
   }
 }
 @media only screen and (min-width: 992px) {
 .blog-content img{
-  height:500px;
+  max-height:500px;
   }
 }
 @media only screen and (min-width: 1200px) {
 .blog-content img{
-  height:600px;
+  max-height:600px;
   }
 }
 .blog-content h6 {
