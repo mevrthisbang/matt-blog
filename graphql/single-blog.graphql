@@ -9,9 +9,8 @@ query($slug: String) {
       description
       createdAt
       title
-      body {
-        json
-      }
+      isSecret
+      passwordHint
       slug
       thumbnail {
         ... on Asset {

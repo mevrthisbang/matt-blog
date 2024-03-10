@@ -1,0 +1,12 @@
+query($slug: String, $password: String) {
+  blogPageCollection(where: {
+   slug: $slug,
+   password: $password
+  }, limit: 1){
+    items{
+      body {
+        json
+      }
+    }
+  }
+}

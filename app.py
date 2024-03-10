@@ -25,11 +25,12 @@ from custom_renderer import CustomAssetBlockRenderer
 
 
 class Configuration(metaclass=MetaFlaskEnv):
-    SPACE_ID = "oexxx"
-    ACCESS_TOKEN = "Dxxx"
-    MANAGEMENT_TOKEN = "Cxxxx"
-    ENVIRONMENT_ID = "xxxx"
+    SPACE_ID = "oeskuqxr8obx"
+    ACCESS_TOKEN = "DeOsK_DiseLfJr6g0teYwRc2ImBZWicNvwjtqc98tvg"
+    MANAGEMENT_TOKEN = "CFPAT-wgSTn14yR4OSkQyXOxowr3JbJFjEIPLFcGTnjIGAAG4"
+    ENVIRONMENT_ID = "master"
     PAGE_SIZE = "5"
+
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -44,18 +45,6 @@ for filename in list_graphql_files:
     with open(os.path.join(graphql_folder, filename), 'r') as f:
         graphql[os.path.basename(filename)] = f.read()
 
-management_client = contentful_management.Client(app.config['MANAGEMENT_TOKEN'])
-environment = management_client.environments(app.config["SPACE_ID"]).find(app.config["ENVIRONMENT_ID"])
-
-def error_handler(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            print(str(e))
-            return render_template("errors.html")
-    return wrapper
 
 def call_graph_api(graphql_query, variables=None):
     data = {
@@ -66,6 +55,22 @@ def call_graph_api(graphql_query, variables=None):
     result = requests.post(endpoint, json=data, headers=headers)
     response_data = json.loads(result.text)
     return response_data
+
+
+management_client = contentful_management.Client(app.config['MANAGEMENT_TOKEN'])
+environment = management_client.environments(app.config["SPACE_ID"]).find(app.config["ENVIRONMENT_ID"])
+
+
+def error_handler(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(str(e))
+            return render_template("errors.html")
+
+    return wrapper
 
 
 def get_categories():
@@ -117,39 +122,87 @@ def get_asset(id):
 def get_blog(slug):
     blog_response = call_graph_api("single-blog", {"slug": slug})
     blog = blog_response["data"]["blogPageCollection"]["items"][0]
-    renderer = DocumentRenderer({
-        "document": DocumentRenderer,
-        "heading-1": HeadingOneRenderer,
-        "heading-2": HeadingTwoRenderer,
-        "heading-3": HeadingThreeRenderer,
-        "heading-4": HeadingFourRenderer,
-        "heading-5": HeadingFiveRenderer,
-        "heading-6": HeadingSixRenderer,
-        "blockquote": BlockQuoteRenderer,
-        "hyperlink": HyperlinkRenderer,
-        "list-item": ListItemRenderer,
-        "ordered-list": OrderedListRenderer,
-        "unordered-list": UnorderedListRenderer,
-        "hr": HrRenderer,
-        "embedded-asset-block": CustomAssetBlockRenderer,
-        "paragraph": ParagraphRenderer,
-        "text": TextRenderer,
-        "bold": BoldRenderer,
-        "code": CodeRenderer,
-        "superscript": SuperscriptRenderer,
-        "subscript": SubscriptRenderer,
-        "italic": ItalicRenderer,
-        "underline": UnderlineRenderer,
-        "table-cell": TableCellRenderer,
-        "table-row": TableRowRenderer,
-        "table-header-cell": TableHeaderCellRenderer,
-        "table": TableRenderer,
-        None: NullRenderer,
-    })
-    rendered_content = renderer.render(blog["body"]["json"])
+    if blog["isSecret"]:
+        body = render_template("secret-blog.html", hint=blog["passwordHint"], slug=slug)
+    else:
+        blog_content_response = call_graph_api("blog-content", {"slug": slug, "password": None})
+        blog_content = blog_content_response["data"]["blogPageCollection"]["items"][0]["body"]["json"]
+        renderer = DocumentRenderer({
+            "document": DocumentRenderer,
+            "heading-1": HeadingOneRenderer,
+            "heading-2": HeadingTwoRenderer,
+            "heading-3": HeadingThreeRenderer,
+            "heading-4": HeadingFourRenderer,
+            "heading-5": HeadingFiveRenderer,
+            "heading-6": HeadingSixRenderer,
+            "blockquote": BlockQuoteRenderer,
+            "hyperlink": HyperlinkRenderer,
+            "list-item": ListItemRenderer,
+            "ordered-list": OrderedListRenderer,
+            "unordered-list": UnorderedListRenderer,
+            "hr": HrRenderer,
+            "embedded-asset-block": CustomAssetBlockRenderer,
+            "paragraph": ParagraphRenderer,
+            "text": TextRenderer,
+            "bold": BoldRenderer,
+            "code": CodeRenderer,
+            "superscript": SuperscriptRenderer,
+            "subscript": SubscriptRenderer,
+            "italic": ItalicRenderer,
+            "underline": UnderlineRenderer,
+            "table-cell": TableCellRenderer,
+            "table-row": TableRowRenderer,
+            "table-header-cell": TableHeaderCellRenderer,
+            "table": TableRenderer,
+            None: NullRenderer,
+        })
+        body = renderer.render(blog_content)
     categories = get_categories()
-    return render_template("blog.html", blog=blog, rendered_content=rendered_content,
+    return render_template("blog.html", blog=blog, rendered_content=body,
                            comments=blog["commentsCollection"]["items"], categories=categories)
+
+
+@app.route('/auth-blog-content', methods=["POST"])
+def auth_blog_content():
+    password = request.form.get("password")
+    blog_blug = request.form.get("slug")
+    blog_content_response = call_graph_api("blog-content", {"slug": blog_blug, "password": password})
+    if ("data" in blog_content_response and "blogPageCollection" in blog_content_response["data"] and "items" in
+            blog_content_response["data"]["blogPageCollection"] and
+            blog_content_response["data"]["blogPageCollection"]["items"]):
+        blog_content = blog_content_response["data"]["blogPageCollection"]["items"][0]["body"]["json"]
+        renderer = DocumentRenderer({
+            "document": DocumentRenderer,
+            "heading-1": HeadingOneRenderer,
+            "heading-2": HeadingTwoRenderer,
+            "heading-3": HeadingThreeRenderer,
+            "heading-4": HeadingFourRenderer,
+            "heading-5": HeadingFiveRenderer,
+            "heading-6": HeadingSixRenderer,
+            "blockquote": BlockQuoteRenderer,
+            "hyperlink": HyperlinkRenderer,
+            "list-item": ListItemRenderer,
+            "ordered-list": OrderedListRenderer,
+            "unordered-list": UnorderedListRenderer,
+            "hr": HrRenderer,
+            "embedded-asset-block": CustomAssetBlockRenderer,
+            "paragraph": ParagraphRenderer,
+            "text": TextRenderer,
+            "bold": BoldRenderer,
+            "code": CodeRenderer,
+            "superscript": SuperscriptRenderer,
+            "subscript": SubscriptRenderer,
+            "italic": ItalicRenderer,
+            "underline": UnderlineRenderer,
+            "table-cell": TableCellRenderer,
+            "table-row": TableRowRenderer,
+            "table-header-cell": TableHeaderCellRenderer,
+            "table": TableRenderer,
+            None: NullRenderer,
+        })
+        body = renderer.render(blog_content)
+        return {"content": body, "canRead": True}
+    return {"content": "Wrong password. Please try again", "canRead": False}
 
 
 @app.route('/post-comment', methods=["POST"])
@@ -226,7 +279,7 @@ def search_blogs():
         return render_template("search_blogs.html", blogs_by_tag=blogs_by_tag, categories=categories)
     if keyword:
         search_response = call_graph_api("search_blogs", {"keyword": keyword, "limit": page_size,
-                                                                      "skip": offset})
+                                                          "skip": offset})
         blogs_by_keyword = search_response["data"]["blogPageCollection"]
         blogs_by_keyword["total_page"] = math.ceil(
             blogs_by_keyword["total"] / page_size)
