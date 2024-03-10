@@ -25,9 +25,9 @@ from custom_renderer import CustomAssetBlockRenderer
 
 
 class Configuration(metaclass=MetaFlaskEnv):
-    SPACE_ID = "oeskuqxr8obx"
-    ACCESS_TOKEN = "DeOsK_DiseLfJr6g0teYwRc2ImBZWicNvwjtqc98tvg"
-    MANAGEMENT_TOKEN = "CFPAT-wgSTn14yR4OSkQyXOxowr3JbJFjEIPLFcGTnjIGAAG4"
+    SPACE_ID = "oeskxxx"
+    ACCESS_TOKEN = "DeOxxxx"
+    MANAGEMENT_TOKEN = "CFPAxxxxx"
     ENVIRONMENT_ID = "master"
     PAGE_SIZE = "5"
 
